@@ -1,0 +1,4 @@
+let 
+    fxConvertTimeToTimeKey = (t as nullable time) as nullable number => Text.PadStart(Text.Replace(Text.From(Time.ToText(t, [Format=”hh:mm:ss”, Culture=”en-US”])), “:”, “”), 6, “0”)
+in 
+    fxConvertTimeToTimeKey

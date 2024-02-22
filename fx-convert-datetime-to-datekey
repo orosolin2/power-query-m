@@ -1,0 +1,4 @@
+let 
+    fxConvertDateTimeToDateKey = (dt as nullable datetime) as nullable number => Number.From(Date.ToText(Date.From(dt), [Format=”yyyyMMdd”, Culture=”en-US”]))
+in 
+    fxConvertDateTimeToDateKey

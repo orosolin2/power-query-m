@@ -1,0 +1,4 @@
+let 
+    fxConvertToBoolean = (txt as nullable text) as nullable logical => txt=“Yes” or txt=”X” or txt=”1” or txt=”True”
+in 
+    fxConvertToBoolean

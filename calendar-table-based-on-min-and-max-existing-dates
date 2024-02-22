@@ -1,0 +1,27 @@
+let
+    #"Menor Data" = List.Min(Combinação[Data]),
+    #"Maior Data" = List.Max(Combinação[Data]),
+    #"Data Início" = Date.StartOfYear(#"Menor Data"),
+    #"Data Fim" = Date.EndOfYear(#"Maior Data"),
+    Dias = Duration.Days(#"Data Fim" - #"Data Início") + 1,
+    Duração = #duration(1,0,0,0),
+    Custom1 = List.Dates(#"Data Início", #"Dias", #"Duração"),
+    #"Converted to Table" = Table.FromList(Custom1, Splitter.SplitByNothing(), null, null, ExtraValues.Ignore),
+    #"Renamed Columns" = Table.RenameColumns(#"Converted to Table",{{"Column1", "Data"}}),
+    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns",{{"Data", type date}}),
+    #"Added Custom" = Table.AddColumn(#"Changed Type", "Data Key", each Number.From(Date.ToText([Data], [Format="yyyyMMdd", Culture="pt-BR"])), Int64.Type),
+    #"Removed Other Columns" = Table.SelectColumns(#"Added Custom",{"Data Key", "Data"}),
+    #"Added Custom5" = Table.AddColumn(#"Removed Other Columns", "Hoje?", each [Data] = Date.From(DateTime.LocalNow()), type logical),
+    #"Inserted Year" = Table.AddColumn(#"Added Custom5", "Ano", each Date.Year([Data]), Int64.Type),
+    #"Inserted Month" = Table.AddColumn(#"Inserted Year", "Mês", each Date.Month([Data]), Int64.Type),
+    #"Inserted Month Name" = Table.AddColumn(#"Inserted Month", "Nome Mês", each Date.MonthName([Data]), type text),
+    #"Inserted First Characters" = Table.AddColumn(#"Inserted Month Name", "Nome Mês Abreviado", each Text.Start([Nome Mês], 3), type text),
+    #"Inserted Day" = Table.AddColumn(#"Inserted First Characters", "Dia", each Date.Day([Data]), Int64.Type),
+    #"Added Custom1" = Table.AddColumn(#"Inserted Day", "Ano Mês", each Number.From(Date.ToText([Data], [Format="yyyyMM", Culture="pt-BR"])), Int64.Type),
+    #"Added Custom2" = Table.AddColumn(#"Added Custom1", "Ano-Mês", each Date.ToText([Data], [Format="yyyy-MM", Culture="pt-BR"]), type text),
+    #"Added Custom3" = Table.AddColumn(#"Added Custom2", "Ano-Nome Mês", each Date.ToText([Data], [Format="yyyy-MMMM", Culture="pt-BR"]), type text),
+    #"Added Custom4" = Table.AddColumn(#"Added Custom3", "Ano-Nome Mês Abreviado", each Date.ToText([Data], [Format="yyyy-MMM", Culture="pt-BR"]), type text),
+    #"Inserted Start of Month" = Table.AddColumn(#"Added Custom4", "Início do Mês", each Date.StartOfMonth([Data]), type date),
+    #"Inserted End of Month" = Table.AddColumn(#"Inserted Start of Month", "Fim do Mês", each Date.EndOfMonth([Data]), type date)
+in
+    #"Inserted End of Month"

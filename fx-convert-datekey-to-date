@@ -1,0 +1,4 @@
+let 
+    fxConvertDateKeyToDate = (dk as nullable number) as nullable date => #date(Number.From(Text.Start(Text.From(dk), 4)), Number.From(Text.Middle(Text.From(dk), 4, 2)), Number.From(Text.End(Text.From(dk), 2)))
+in 
+    fxConvertDateKeyToDate
